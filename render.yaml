@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: flask-app
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+databases:
+  - name: flask-db
+    databaseName: flask_app_db
+    user: render
