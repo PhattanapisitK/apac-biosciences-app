@@ -52,7 +52,7 @@ def get_db():
 def init_db():
     db = get_db()
     if 'DATABASE_URL' in os.environ:
-        # PostgreSQL
+        # --- PostgreSQL (Cloud) ---
         with db() as session:
             session.execute(text("""
                 CREATE TABLE IF NOT EXISTS users (
@@ -60,6 +60,8 @@ def init_db():
                     username VARCHAR(80) UNIQUE NOT NULL,
                     password_hash VARCHAR(120) NOT NULL
                 );
+            """))
+            session.execute(text("""
                 CREATE TABLE IF NOT EXISTS entries (
                     code VARCHAR(50) PRIMARY KEY,
                     date VARCHAR(20),
@@ -67,32 +69,44 @@ def init_db():
                     weight_out NUMERIC,
                     quality NUMERIC
                 );
-                -- Insert default user if not exists
-                INSERT INTO users (username, password_hash) 
-                SELECT 'admin', :pw_hash WHERE NOT EXISTS (SELECT 1 FROM users WHERE username = 'admin');
-            """), {'pw_hash': generate_password_hash('password123')})
+            """))
+            # ตรวจสอบว่ามี admin หรือยัง
+            result = session.execute(text("SELECT 1 FROM users WHERE username = 'admin'"))
+            if not result.fetchone():
+                pw_hash = generate_password_hash('password123')
+                session.execute(text("""
+                    INSERT INTO users (username, password_hash) VALUES ('admin', :pw)
+                """), {'pw': pw_hash})
             session.commit()
     else:
-        # SQLite
+        # --- SQLite (Local) ---
         cursor = db.cursor()
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS users (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 username TEXT UNIQUE NOT NULL,
                 password_hash TEXT NOT NULL
-            );
+            )
+        """)
+        cursor.execute("""
             CREATE TABLE IF NOT EXISTS entries (
                 code TEXT PRIMARY KEY,
                 date TEXT,
                 weight_in REAL,
                 weight_out REAL,
                 quality REAL
-            );
-            -- Insert default user
-            INSERT OR IGNORE INTO users (username, password_hash) VALUES ('admin', ?);
-        """, (generate_password_hash('password123'),))
+            )
+        """)
+        # ตรวจสอบว่ามี admin หรือยัง
+        cursor.execute("SELECT 1 FROM users WHERE username = 'admin'")
+        if not cursor.fetchone():
+            pw_hash = generate_password_hash('password123')
+            cursor.execute("""
+                INSERT OR IGNORE INTO users (username, password_hash) VALUES (?, ?)
+            """, ('admin', pw_hash))
         db.commit()
-    db.close()
+    if not 'DATABASE_URL' in os.environ:
+        db.close()
 
 init_db()
 
