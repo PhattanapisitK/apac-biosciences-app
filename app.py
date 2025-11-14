@@ -227,10 +227,14 @@ def logout():
     return redirect(url_for('login'))
 
 # หน้าแรก (protected)
+from datetime import datetime
+
 @app.route('/', methods=['GET', 'POST'])
 @login_required
 def index():
-    prefill = {'base_code': '', 'date': '', 'weight_in': '', 'weight_out': '', 'quality': ''}
+    # ตั้งค่าวันนี้เป็น default (ถ้าไม่มี prefill)
+    today_th = datetime.now().strftime('%d/%m/%Y')  # เช่น 14/11/2568
+    prefill = {'base_code': '', 'date': today_th, 'weight_in': '', 'weight_out': '', 'quality': ''}
 
     if request.method == 'POST':
         base_code = request.form.get('base_code')
@@ -310,7 +314,7 @@ def render_form(prefill):
 
     form_content = f"""
     <div class="card p-4">
-        <h2 class="text-primary mb-4"><i class="bi bi-journal-plus"></i> เพิ่ม/แก้ไขข้อมูล</h2>
+        <h2 class="text-primary mb-4">เพิ่ม/แก้ไขข้อมูล</h2>
         {flash_html}
         <form method="post">
             <div class="row g-3">
@@ -324,7 +328,12 @@ def render_form(prefill):
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">วันที่</label>
-                    <input name="date" class="form-control" value="{prefill['date']}" placeholder="เช่น 07/11/2568">
+                    <div class="input-group">
+                        <input name="date" class="form-control datepicker" value="{prefill['date']}" placeholder="เช่น 07/11/2568" autocomplete="off">
+                        <span class="input-group-text">
+                            <i class="bi bi-calendar3"></i>
+                        </span>
+                    </div>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">น้ำหนักขาเข้า</label>
@@ -340,10 +349,10 @@ def render_form(prefill):
                 </div>
                 <div class="col-12">
                     <button type="submit" class="btn btn-primary btn-lg px-4">
-                        <i class="bi bi-save"></i> บันทึกข้อมูล
+                        บันทึกข้อมูล
                     </button>
                     <a href="/list" class="btn btn-outline-secondary btn-lg px-4">
-                        <i class="bi bi-table"></i> ไปหน้ารายการ
+                        ไปหน้ารายการ
                     </a>
                 </div>
             </div>
@@ -360,6 +369,8 @@ def render_form(prefill):
         <title>ระบบจัดการตัวอย่าง</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+        <!-- Bootstrap Datepicker -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
         <style>
             body {{ background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); min-height: 100vh; }}
             .container {{ max-width: 1000px; }}
@@ -369,7 +380,7 @@ def render_form(prefill):
     <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
-            <a class="navbar-brand" href="/"><i class="bi bi-flask"></i> APAC Biosciences</a>
+            <a class="navbar-brand" href="/"> APAC Biosciences</a>
             <div class="navbar-nav ms-auto">
                 <a class="nav-link" href="/list">รายการ</a>
                 <a class="nav-link" href="/logout">ออกจากระบบ</a>
@@ -380,6 +391,19 @@ def render_form(prefill):
         {form_content}
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.th.min.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        $('.datepicker').datepicker({
+            format: 'dd/mm/yyyy',
+            language: 'th',
+            autoclose: true,
+            todayHighlight: true,
+            orientation: 'bottom auto'
+        });
+    });
+    </script>
     </body>
     </html>
     """
