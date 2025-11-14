@@ -334,9 +334,9 @@ def render_form(prefill):
         <form method="post">
             <div class="row g-3">
                 <div class="col-md-6">
-                    <label class="form-label"><strong>รหัสตัวอย่าง</strong></label>
+                    <label class="form-label"><strong>รหัสหลัก *</strong></label>
                     <div class="input-group">
-                        <input name="base_code" class="form-control" value="{prefill['base_code']}" required placeholder="เช่น L9R3-0711">
+                        <input name="base_code" class="form-control" value="{{prefill['base_code']}}" required placeholder="เช่น L9R3-0711">
                         <span class="input-group-text">-1, -2, ...</span>
                     </div>
                     <small class="text-muted">ระบบจะเพิ่มเลขลำดับให้อัตโนมัติ</small>
@@ -344,7 +344,7 @@ def render_form(prefill):
                 <div class="col-md-6">
                     <label class="form-label">วันที่</label>
                     <div class="input-group">
-                        <input name="date" class="form-control datepicker" value="{prefill['date']}" placeholder="เช่น 07/11/2568" autocomplete="off">
+                        <input name="date" class="form-control datepicker" value="{{prefill['date']}}" placeholder="เช่น 14/11/2568" autocomplete="off">
                         <span class="input-group-text">
                             <i class="bi bi-calendar3"></i>
                         </span>
@@ -352,15 +352,15 @@ def render_form(prefill):
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">น้ำหนักขาเข้า</label>
-                    <input type="number" step="0.01" name="weight_in" class="form-control" value="{prefill['weight_in']}">
+                    <input type="number" step="0.01" name="weight_in" class="form-control" value="{{prefill['weight_in']}}">
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">น้ำหนักขาออก</label>
-                    <input type="number" step="0.01" name="weight_out" class="form-control" value="{prefill['weight_out']}">
+                    <input type="number" step="0.01" name="weight_out" class="form-control" value="{{prefill['weight_out']}}">
                 </div>
                 <div class="col-12">
                     <label class="form-label">คุณภาพ</label>
-                    <input type="number" step="0.01" name="quality" class="form-control" value="{prefill['quality']}">
+                    <input type="number" step="0.01" name="quality" class="form-control" value="{{prefill['quality']}}">
                 </div>
                 <div class="col-12">
                     <button type="submit" class="btn btn-primary btn-lg px-4">
@@ -376,34 +376,50 @@ def render_form(prefill):
     """
 
     return f"""
-<!DOCTYPE html>
-<html lang="th">
-<head>
-    ...
-    <!-- Flatpickr CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-</head>
-<body>
-    ... ฟอร์ม ...
-
-    <!-- Flatpickr JS -->
+    <!DOCTYPE html>
+    <html lang="th">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>ระบบจัดการตัวอย่าง</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+        <style>
+            body {{ background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); min-height: 100vh; }}
+            .container {{ max-width: 1000px; }}
+            .card {{ box-shadow: 0 4px 12px rgba(0,0,0,0.1); border:: none; }}
+        </style>
+    </head>
+    <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/"> APAC Biosciences</a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="/list">รายการ</a>
+                <a class="nav-link" href="/logout">ออกจากระบบ</a>
+            </div>
+        </div>
+    </nav>
+    <div class="container py-5">
+        {form_content}
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/th.js"></script>
-
-    <!-- เริ่มต้น Flatpickr -->
     <script>
-document.addEventListener('DOMContentLoaded', function() {{
-    flatpickr('.datepicker', {{
-        dateFormat: 'd/m/Y',
-        locale: 'th',
-        defaultDate: 'today',
-        allowInput: true
+    document.addEventListener('DOMContentLoaded', function() {{
+        flatpickr('.datepicker', {{
+            dateFormat: 'd/m/Y',
+            locale: 'th',
+            defaultDate: 'today',
+            allowInput: true
+        }});
     }});
-}});
-</script>
-</body>
-</html>
-"""
+    </script>
+    </body>
+    </html>
+    """
 
 # หน้ารายการ (protected)
 @app.route('/list')
