@@ -365,8 +365,7 @@ def render_form(prefill):
     <html lang="th">
     <head>
     ...
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <!-- Bootstrap Datepicker -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
@@ -390,17 +389,17 @@ def render_form(prefill):
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.th.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/th.js"></script>
 
 <!-- Datepicker JS -->
 <script>
-$(document).ready(function() {
-    $('.datepicker').datepicker({
-        format: 'dd/mm/yyyy',
-        language: 'th',
-        autoclose: true,
-        todayHighlight: true,
-        orientation: 'bottom auto'
-    });
+document.addEventListener('DOMContentLoaded', function() {
+    flatpickr('.datepicker', {
+        dateFormat: 'd/m/Y',
+        locale: 'th',
+        defaultDate: 'today'
+    })
 });
 </script>
     </body>
