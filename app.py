@@ -392,15 +392,15 @@ def render_form(prefill):
 
     <!-- เริ่มต้น Flatpickr -->
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        flatpickr('.datepicker', {
-            dateFormat: 'd/m/Y',
-            locale: 'th',
-            defaultDate: 'today',
-            allowInput: true
-        });
-    });
-    </script>
+document.addEventListener('DOMContentLoaded', function() {{
+    flatpickr('.datepicker', {{
+        dateFormat: 'd/m/Y',
+        locale: 'th',
+        defaultDate: 'today',
+        allowInput: true
+    }});
+}});
+</script>
 </body>
 </html>
 """
