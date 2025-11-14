@@ -61,6 +61,7 @@ def init_db():
         if 'DATABASE_URL' in os.environ:
             # PostgreSQL
             with db() as session:
+                # สร้างตาราง users
                 session.execute(text("""
                     CREATE TABLE IF NOT EXISTS users (
                         id SERIAL PRIMARY KEY,
@@ -68,6 +69,7 @@ def init_db():
                         password_hash VARCHAR(120) NOT NULL
                     )
                 """))
+                # สร้างตาราง entries
                 session.execute(text("""
                     CREATE TABLE IF NOT EXISTS entries (
                         code VARCHAR(50) PRIMARY KEY,
@@ -77,7 +79,7 @@ def init_db():
                         quality NUMERIC
                     )
                 """))
-                # Check admin
+                # เพิ่ม admin ถ้ายังไม่มี
                 result = session.execute(text("SELECT 1 FROM users WHERE username = 'admin'"))
                 if not result.fetchone():
                     pw_hash = generate_password_hash('password123')
@@ -102,18 +104,19 @@ def init_db():
                     quality REAL
                 )
             """)
-            # Check admin
             cursor.execute("SELECT 1 FROM users WHERE username = 'admin'")
             if not cursor.fetchone():
                 pw_hash = generate_password_hash('password123')
-                cursor.execute("INSERT INTO users (username, password_hash) VALUES (?, ?)", ('admin', pw_hash))
+                cursor.execute("INSERT OR IGNORE INTO users (username, password_hash) VALUES (?, ?)", ('admin', pw_hash))
             db.commit()
             db.close()
-        print("DB initialized successfully!")  # For logs
+        print("DB initialized successfully!")
     except Exception as e:
         print(f"DB init error: {e}")
 
 init_db()
+with app.app_context():
+    init_db()
 
 # สถานะ (เหมือนเดิม)
 def get_status(quality):
@@ -606,6 +609,9 @@ def export():
     except Exception as e:
         flash(f'เกิดข้อผิดพลาดในการ export: {e}', 'danger')
         return redirect(url_for('list_entries'))
+
+with app.app_context():
+    init_db()
 
 if __name__ == '__main__':
     app.run(debug=True)
