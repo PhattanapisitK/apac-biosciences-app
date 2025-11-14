@@ -319,7 +319,7 @@ def render_form(prefill):
         <form method="post">
             <div class="row g-3">
                 <div class="col-md-6">
-                    <label class="form-label"><strong>รหัสหลัก *</strong></label>
+                    <label class="form-label"><strong>รหัสตัวอย่าง</strong></label>
                     <div class="input-group">
                         <input name="base_code" class="form-control" value="{prefill['base_code']}" required placeholder="เช่น L9R3-0711">
                         <span class="input-group-text">-1, -2, ...</span>
@@ -364,19 +364,15 @@ def render_form(prefill):
     <!DOCTYPE html>
     <html lang="th">
     <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>ระบบจัดการตัวอย่าง</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
-        <!-- Bootstrap Datepicker -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
-        <style>
-            body {{ background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); min-height: 100vh; }}
-            .container {{ max-width: 1000px; }}
-            .card {{ box-shadow: 0 4px 12px rgba(0,0,0,0.1); border: none; }}
-        </style>
-    </head>
+    ...
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <!-- Bootstrap Datepicker -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.th.min.js"></script>
+    ...
+</head>
     <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
@@ -393,17 +389,20 @@ def render_form(prefill):
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.th.min.js"></script>
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        $('.datepicker').datepicker({
-            format: 'dd/mm/yyyy',
-            language: 'th',
-            autoclose: true,
-            todayHighlight: true,
-            orientation: 'bottom auto'
-        });
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Datepicker JS -->
+<script>
+$(document).ready(function() {
+    $('.datepicker').datepicker({
+        format: 'dd/mm/yyyy',
+        language: 'th',
+        autoclose: true,
+        todayHighlight: true,
+        orientation: 'bottom auto'
     });
-    </script>
+});
+</script>
     </body>
     </html>
     """
