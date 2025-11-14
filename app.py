@@ -47,16 +47,28 @@ def load_user(user_id):
 # Database Setup
 def get_db():
     if 'DATABASE_URL' in os.environ:
-        # Cloud: PostgreSQL
-        engine = create_engine(os.environ['DATABASE_URL'])
-        Session = sessionmaker(bind=engine)
-        return Session
+        try:
+            engine = create_engine(os.environ['DATABASE_URL'])
+            Session = sessionmaker(bind=engine)
+            print("Connected to PostgreSQL")
+            return Session
+        except Exception as e:
+            print(f"PostgreSQL error: {e}")
+            return None
     else:
-        # Local: SQLite
-        return sqlite3.connect('database.db')
+        try:
+            conn = sqlite3.connect('database.db')
+            print("Connected to SQLite")
+            return conn
+        except Exception as e:
+            print(f"SQLite error: {e}")
+            return None
 
 def init_db():
     db = get_db()
+    if db is None:
+        print("DB connection failed!")
+        return
     try:
         if 'DATABASE_URL' in os.environ:
             # PostgreSQL
@@ -611,7 +623,9 @@ def export():
         return redirect(url_for('list_entries'))
 
 with app.app_context():
-    init_db()
+    print("Starting app in app context...")
+    init_db()  # สร้างตาราง + admin
+    print("DB initialized!")
 
 if __name__ == '__main__':
     app.run(debug=True)
