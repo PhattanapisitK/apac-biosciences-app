@@ -376,50 +376,34 @@ def render_form(prefill):
     """
 
     return f"""
-    <!DOCTYPE html>
-    <html lang="th">
-    <head>
+<!DOCTYPE html>
+<html lang="th">
+<head>
     ...
+    <!-- Flatpickr CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <!-- Bootstrap Datepicker -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.th.min.js"></script>
-    ...
 </head>
-    <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container">
-            <a class="navbar-brand" href="/"> APAC Biosciences</a>
-            <div class="navbar-nav ms-auto">
-                <a class="nav-link" href="/list">รายการ</a>
-                <a class="nav-link" href="/logout">ออกจากระบบ</a>
-            </div>
-        </div>
-    </nav>
-    <div class="container py-5">
-        {form_content}
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.th.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<body>
+    ... ฟอร์ม ...
+
+    <!-- Flatpickr JS -->
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/th.js"></script>
 
-<!-- Datepicker JS -->
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    flatpickr('.datepicker', {
-        dateFormat: 'd/m/Y',
-        locale: 'th',
-        defaultDate: 'today'
-    })
-});
-</script>
-    </body>
-    </html>
-    """
+    <!-- เริ่มต้น Flatpickr -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        flatpickr('.datepicker', {
+            dateFormat: 'd/m/Y',
+            locale: 'th',
+            defaultDate: 'today',
+            allowInput: true
+        });
+    });
+    </script>
+</body>
+</html>
+"""
 
 # หน้ารายการ (protected)
 @app.route('/list')
