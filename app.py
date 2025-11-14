@@ -254,7 +254,7 @@ def index():
     if request.method == 'POST':
         base_code = request.form.get('base_code')
         if not base_code:
-            flash("กรุณาระบุรหัสหลัก!", "danger")
+            flash("กรุณาระบุรหัสตัวอย่าง!", "danger")
         else:
             date = request.form.get('date') or None
             weight_in = float(request.form['weight_in']) if request.form.get('weight_in') else None
@@ -334,12 +334,11 @@ def render_form(prefill):
         <form method="post">
             <div class="row g-3">
                 <div class="col-md-6">
-                    <label class="form-label"><strong>รหัสหลัก *</strong></label>
+                    <label class="form-label"><strong>รหัสตัวอย่าง</strong></label>
                     <div class="input-group">
-                        <input name="base_code" class="form-control" value="{{prefill['base_code']}}" required placeholder="เช่น L9R3-0711">
-                        <span class="input-group-text">-1, -2, ...</span>
+                        <input name="base_code" class="form-control" value="" required placeholder="เช่น L9R3-0711">
                     </div>
-                    <small class="text-muted">ระบบจะเพิ่มเลขลำดับให้อัตโนมัติ</small>
+                    <small class="text-muted">ระบบจะเพิ่มเลขลำดับให้อัตโนมัติ (1,2,3,...)</small>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">วันที่</label>
